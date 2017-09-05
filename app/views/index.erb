@@ -3,7 +3,16 @@
 <h2>Games Available on Sfeam:</h2>
 <% Game.all.each do |game| %>
   <% @avg = game.ratings.average(:rating_value).to_f %>
-  <h4><%= game.name %>    <a href="/games/<%= game.id %>/add" value="<%= game.id %>">Add <%= game.name %> To Your Library</a>
+  <h4><%= game.name %>
+
+  <% if @user = current_user(session) #&& @user.games.include?(game) %>
+    <% if @user.games.include?(game) %>
+      Already in Your Library!
+    <% else%>
+      <a href="/games/<%= game.id %>/add" value="<%= game.id %>">Add <%= game.name %> To Your Library</a>
+    <% end %>
+  <% end %>
+
   <% if @avg == 0.0 %>
     Rating: Not Yet Rated
   <% else%>
@@ -14,6 +23,6 @@
 <br></br>
 
 <p><a href="/games/new">Add A New Game to Sfeam</a></p>
-
+<p><a href="/games">Your Game Library</a></p>
 <p><a href="/login">Log In</a></p>
 <p><a href="/signup">Sign Up</a></p>
