@@ -1,5 +1,4 @@
 require './config/environment'
-require 'pry'
 
 class ApplicationController < Sinatra::Base
   include Concerns::HelperMethods
@@ -51,7 +50,5 @@ class ApplicationController < Sinatra::Base
       redirect to '/login'
     end
   end
-
-
 
 end
