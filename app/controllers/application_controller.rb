@@ -37,8 +37,19 @@ class ApplicationController < Sinatra::Base
   end
 
   get '/games/:id/add' do
-    binding.pry
-    redirect '/games'
+    if is_logged_in?(session)
+      @game = Game.find(params[:id])
+      @user = current_user(session)
+      if @user.games.include?(@game)
+        redirect to '/games'
+      else
+        @user.games << @game
+      end
+    else
+      redirect to '/login'
+    end
   end
+
+
 
 end

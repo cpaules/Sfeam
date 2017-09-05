@@ -36,4 +36,13 @@ class UsersController < ApplicationController
     end
   end
 
+  get "/logout" do
+    if is_logged_in?(session)
+      session.clear
+      redirect to "/"
+    else
+      redirect to "/games"
+    end
+  end
+
 end
