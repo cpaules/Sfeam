@@ -1,0 +1,14 @@
+<h1>Welcome to Sfeam!</h1>
+
+<h2>Games:</h2>
+<% Game.all.each do |game| %>
+  <h4><%= game.name %>    <a href="/games/<%= game.id %>/add">Add To Your Library</a> </h4>
+
+<% end %>
+
+<br></br>
+
+<p><a href="/games/new">Add A New Game to Sfeam</a></p>
+
+<p><a href="/login">Log In</a></p>
+<p><a href="/signup">Sign Up</a></p>
