@@ -20,6 +20,7 @@ ActiveRecord::Schema.define(version: 20170901194145) do
   create_table "ratings", force: :cascade do |t|
     t.integer "user_id"
     t.integer "game_id"
+    t.integer "rating_value"
   end
 
   create_table "users", force: :cascade do |t|

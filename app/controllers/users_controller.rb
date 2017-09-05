@@ -12,6 +12,7 @@ class UsersController < ApplicationController
    user = User.new(:username => params[:username], :email => params[:email], :password => params[:password])
    if user.save && user.username.length > 0
      session[:user_id] = user.id
+     user.ratings.delete_all
      redirect to "/games"
    else
      redirect "/signup"

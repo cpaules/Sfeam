@@ -2,7 +2,12 @@
 
 <h2>Your Games Library:</h2>
 <% @user.games.each do |game| %>
-  <h4><%= game.name %>   <a href="/games/<%= game.id %>/add_rating" value="<%= game.id %>"> Add A Rating</a>  </h4>
+  <% @rating = Rating.find_by(:user_id => @user.id, :game_id => game.id) %>
+  <h4><%= game.name %>   <% if !@rating.rating_value %>
+    <a href="/games/<%= game.id %>/add_rating" value="<%= game.id %>"> Add A Rating</a>
+  <% else%>
+    Your rating: <%= @rating.rating_value %> </h4>
+  <% end %>
 <% end %>
 
 <br></br>

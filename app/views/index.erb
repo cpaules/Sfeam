@@ -2,8 +2,13 @@
 
 <h2>Games Available on Sfeam:</h2>
 <% Game.all.each do |game| %>
-  <h4><%= game.name %>    <a href="/games/<%= game.id %>/add" value="<%= game.id %>">Add <%= game.name %> To Your Library</a></h4>
-
+  <% @avg = game.ratings.average(:rating_value).to_f %>
+  <h4><%= game.name %>    <a href="/games/<%= game.id %>/add" value="<%= game.id %>">Add <%= game.name %> To Your Library</a>
+  <% if @avg == 0.0 %>
+    Rating: Not Yet Rated
+  <% else%>
+    Community rating: <%= @avg %> </h4>
+  <% end %>
 <% end %>
 
 <br></br>

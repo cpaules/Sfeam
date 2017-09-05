@@ -22,6 +22,7 @@ class ApplicationController < Sinatra::Base
   post '/games/new' do
     if params[:name] != ""
       @game = Game.create(params)
+      @game.ratings.delete_all
       redirect to '/'
     end
     redirect to '/games/new'
@@ -29,7 +30,7 @@ class ApplicationController < Sinatra::Base
 
   get '/games' do
     @user = current_user(session)
-    if is_logged_in?(session)
+      if is_logged_in?(session) && @user
       erb :'/games/games'
     else
       redirect to "/login"
