@@ -44,6 +44,7 @@ class ApplicationController < Sinatra::Base
         redirect to '/games'
       else
         @user.games << @game
+        redirect to '/games'
       end
     else
       redirect to '/login'

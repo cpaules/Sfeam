@@ -2,7 +2,7 @@
 
 <h2>Your Games Library:</h2>
 <% @user.games.each do |game| %>
-  <h4><%= game.name %></h4>
+  <h4><%= game.name %>   <a href="/games/<%= game.id %>/add_rating" value="<%= game.id %>"> Add A Rating</a>  </h4>
 <% end %>
 
 <br></br>
