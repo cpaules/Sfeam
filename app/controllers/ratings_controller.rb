@@ -9,12 +9,13 @@ class RatingsController < ApplicationController
     erb :'ratings/create_rating'
   end
 
-  post '/games/:id/add_rating' do #error upon creating a rating
+  post '/games/:id/add_rating' do
     @game = Game.find(params[:id])
     @user = current_user(session)
     @rating = Rating.find_by(:user_id => @user.id, :game_id => @game.id)
     @rating.rating_value = params[:rating_value]
     @game.ratings << @rating
     @user.ratings << @rating
+    redirect to '/games'
   end
 end
