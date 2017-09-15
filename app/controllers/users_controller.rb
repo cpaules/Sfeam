@@ -1,7 +1,7 @@
 class UsersController < ApplicationController
 
   get '/signup' do
-   if is_logged_in?(session)
+   if is_logged_in?
      redirect to "/games"
    else
      erb :'/users/create_user'
@@ -10,9 +10,8 @@ class UsersController < ApplicationController
 
  post '/signup' do
    user = User.new(:username => params[:username], :email => params[:email], :password => params[:password])
-   if user.save && user.username.length > 0
+   if user.save
      session[:user_id] = user.id
-     user.ratings.delete_all
      redirect to "/games"
    else
      redirect "/signup"
@@ -20,7 +19,7 @@ class UsersController < ApplicationController
   end
 
   get "/login" do
-    if is_logged_in?(session)
+    if is_logged_in?
       redirect to "/games"
     else
       erb :'/users/login'
@@ -38,7 +37,7 @@ class UsersController < ApplicationController
   end
 
   get "/logout" do
-    if is_logged_in?(session)
+    if is_logged_in?
       session.clear
       redirect to "/"
     else

@@ -4,32 +4,29 @@ class GamesController < ApplicationController
     erb :'games/create_game'
   end
 
-  post '/games/new' do
+  post '/games' do
     if params[:name] != ""
       @game = Game.create(params)
-      @game.ratings.delete_all
       redirect to '/'
     end
     redirect to '/games/new'
   end
 
   get '/games' do
-    @user = current_user(session)
-      if is_logged_in?(session) && @user
+    if is_logged_in?
       erb :'/games/games'
     else
       redirect to "/login"
     end
   end
 
-  get '/games/:id/add' do
-    if is_logged_in?(session)
-      @game = Game.find(params[:id])
-      @user = current_user(session)
-      if @user.games.include?(@game)
+  post '/games/:id/add' do
+    if is_logged_in?
+      @game = Game.find_by(id: params[:id])
+      if current_user.games.include?(@game)
         redirect to '/games'
       else
-        @user.games << @game
+        current_user.games << @game
         redirect to '/games'
       end
     else

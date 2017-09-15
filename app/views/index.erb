@@ -1,12 +1,12 @@
 <h1>Welcome to Sfeam!</h1>
 
 <h2>Games Available on Sfeam:</h2>
-<% Game.all.each do |game| %>
+<% @games.each do |game| %>
   <% @avg = game.ratings.average(:rating_value).to_f %>
   <h4><%= game.name %>
 
-  <% if @user = current_user(session) %>
-    <% if @user.games.include?(game) %>
+  <% if current_user %>
+    <% if current_user.games.include?(game) %>
       Already in Your Library!
     <% else%>
       <a href="/games/<%= game.id %>/add" value="<%= game.id %>">Add <%= game.name %> To Your Library</a>
@@ -23,7 +23,7 @@
 <br></br>
 <p><a href="/games/new">Add A New Game to Sfeam</a></p>
 
-<% if @user = current_user(session) %>
+<% if current_user %>
   <p><a href="/games">Your Game Library</a></p>
   <p><a href="/logout">Log Out</a></p>
 <% else %>

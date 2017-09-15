@@ -1,4 +1,3 @@
-require 'pry'
 class RatingsController < ApplicationController
 
   get '/games/:id/add_rating' do
@@ -9,11 +8,10 @@ class RatingsController < ApplicationController
   post '/games/:id/add_rating' do
     if (0..10).include?(params[:rating_value].to_i)
       @game = Game.find(params[:id])
-      @user = current_user(session)
-      @rating = Rating.find_by(:user_id => @user.id, :game_id => @game.id)
+      @rating = Rating.find_by(:user_id => current_user.id, :game_id => @game.id)
       @rating.rating_value = params[:rating_value]
       @game.ratings << @rating
-      @user.ratings << @rating
+      current_user.ratings << @rating
       redirect to '/games'
     else
       redirect to '/games/:id/add_rating'
@@ -21,11 +19,10 @@ class RatingsController < ApplicationController
   end
 
   get '/games/:id/edit_rating' do
-    if is_logged_in?(session)
+    if is_logged_in?
       @game = Game.find(params[:id])
-      @user = current_user(session)
-      @rating = Rating.find_by(:user_id => @user.id, :game_id => @game.id)
-      if @user.id == @rating.user_id && @rating
+      @rating = Rating.find_by(:user_id => current_user.id, :game_id => @game.id)
+      if current_user.id == @rating.user_id && @rating
         erb :'/ratings/edit_rating'
       else
         redirect to '/games'
@@ -35,22 +32,20 @@ class RatingsController < ApplicationController
     end
   end
 
-  post '/games/:id/edit_rating' do
+  patch '/games/:id' do
     @game = Game.find(params[:id])
-    @user = current_user(session)
-    @rating = Rating.find_by(:user_id => @user.id, :game_id => @game.id)
+    @rating = Rating.find_by(:user_id => current_user.id, :game_id => @game.id)
     if (0..10).include?(params[:rating_value].to_i)
       @rating.update(:rating_value => params[:rating_value])
     end
     redirect to '/games'
   end
 
-  get '/games/:id/delete_rating' do
-    if is_logged_in?(session)
+  delete '/games/:id' do
+    if is_logged_in?
       @game = Game.find(params[:id])
-      @user = current_user(session)
-      @rating = Rating.find_by(:user_id => @user.id, :game_id => @game.id)
-      if @user.id == @rating.user_id
+      @rating = Rating.find_by(:user_id => current_user.id, :game_id => @game.id)
+      if current_user.id == @rating.user_id
         @rating.rating_value = nil
         @rating.save
       end

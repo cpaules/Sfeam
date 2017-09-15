@@ -1,14 +1,17 @@
-<h1>Welcome, <%= @user.username %></h1>
+<h1>Welcome, <%= current_user.username %></h1>
 
 <h2>Your Games Library:</h2>
-<% @user.games.each do |game| %>
-  <% @rating = Rating.find_by(:user_id => @user.id, :game_id => game.id) %>
+<% current_user.games.each do |game| %>
+  <% @rating = Rating.find_by(:user_id => current_user.id, :game_id => game.id) %>
   <h4><%= game.name %>   <% if !@rating.rating_value %>
     <a href="/games/<%= game.id %>/add_rating" value="<%= game.id %>"> Add A Rating</a>
   <% else%>
-    Your rating: <%= @rating.rating_value %> <a href="/games/<%=game.id%>/edit_rating">Edit Rating </a>
-    <a href="/games/<%=game.id%>/delete_rating">Delete Rating </a>
-     </h4>
+    Your rating: <%= @rating.rating_value %> <a href="/games/<%=game.id%>/edit_rating"><button>Edit Rating</button> </a>
+    <form method="post" action="/games/<%=game.id%>">
+      <input id="hidden" type="hidden" name="_method" value="DELETE">
+      <input type="submit" value="Delete Rating">
+    </form>
+    </h4>
   <% end %>
 <% end %>
 

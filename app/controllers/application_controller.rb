@@ -1,7 +1,8 @@
 require './config/environment'
+require 'pry'
 
 class ApplicationController < Sinatra::Base
-  include Concerns::HelperMethods
+  include HelperMethods
 
   configure do
     enable :sessions
@@ -11,6 +12,7 @@ class ApplicationController < Sinatra::Base
   end
 
   get '/' do
+    @games = Game.all
     erb :index
   end
 
