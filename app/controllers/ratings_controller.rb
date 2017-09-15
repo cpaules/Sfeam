@@ -1,3 +1,4 @@
+require 'pry'
 class RatingsController < ApplicationController
 
   get '/games/:id/add_rating' do
@@ -6,7 +7,7 @@ class RatingsController < ApplicationController
   end
 
   post '/games/:id/add_rating' do
-    if [0,1,2,3,4,5,6,7,8,9,10].include?(params[:rating_value].to_i)
+    if (0..10).include?(params[:rating_value].to_i)
       @game = Game.find(params[:id])
       @user = current_user(session)
       @rating = Rating.find_by(:user_id => @user.id, :game_id => @game.id)
@@ -16,6 +17,46 @@ class RatingsController < ApplicationController
       redirect to '/games'
     else
       redirect to '/games/:id/add_rating'
+    end
+  end
+
+  get '/games/:id/edit_rating' do
+    if is_logged_in?(session)
+      @game = Game.find(params[:id])
+      @user = current_user(session)
+      @rating = Rating.find_by(:user_id => @user.id, :game_id => @game.id)
+      if @user.id == @rating.user_id && @rating
+        erb :'/ratings/edit_rating'
+      else
+        redirect to '/games'
+      end
+    else
+      redirect to '/login'
+    end
+  end
+
+  post '/games/:id/edit_rating' do
+    @game = Game.find(params[:id])
+    @user = current_user(session)
+    @rating = Rating.find_by(:user_id => @user.id, :game_id => @game.id)
+    if (0..10).include?(params[:rating_value].to_i)
+      @rating.update(:rating_value => params[:rating_value])
+    end
+    redirect to '/games'
+  end
+
+  get '/games/:id/delete_rating' do
+    if is_logged_in?(session)
+      @game = Game.find(params[:id])
+      @user = current_user(session)
+      @rating = Rating.find_by(:user_id => @user.id, :game_id => @game.id)
+      if @user.id == @rating.user_id
+        @rating.rating_value = nil
+        @rating.save
+      end
+      redirect to '/games'
+    else
+      redirect to '/login'
     end
   end
 end

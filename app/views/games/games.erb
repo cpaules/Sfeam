@@ -6,7 +6,9 @@
   <h4><%= game.name %>   <% if !@rating.rating_value %>
     <a href="/games/<%= game.id %>/add_rating" value="<%= game.id %>"> Add A Rating</a>
   <% else%>
-    Your rating: <%= @rating.rating_value %> </h4>
+    Your rating: <%= @rating.rating_value %> <a href="/games/<%=game.id%>/edit_rating">Edit Rating </a>
+    <a href="/games/<%=game.id%>/delete_rating">Delete Rating </a>
+     </h4>
   <% end %>
 <% end %>
 
